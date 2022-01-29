@@ -2,7 +2,7 @@ package instruction.ins;
 
 import elements.enums.InsRegex;
 import elements.node.Immediate;
-import elements.node.InstructI;
+import elements.node.instructiontypes.InstructI;
 import elements.node.Register;
 
 

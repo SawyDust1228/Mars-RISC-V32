@@ -1,26 +1,25 @@
 package instruction.ins;
 
-import elements.enums.InsRegex;
 import elements.node.Immediate;
-import elements.node.instructiontypes.InstructI;
 import elements.node.Register;
+import elements.node.instructiontypes.InstructS;
+
+public class Sw extends InstructS {
 
 
-public class Lw extends InstructI {
-
-    public Lw(Register rs, Register rd, Immediate imme) {
+    public Sw(Register rs, Register rd, Immediate imme) {
         super(rs, rd, imme);
-        super.setRegex(InsRegex.lw);
     }
 
     @Override
     public void operate() {
+
     }
 
     @Override
     public void operate(int[] stack) {
         int index = getIndex();
-        super.getRd().setValue(stack[index]);
+        stack[index] = super.getRd().getValue();
     }
 
     private int getIndex() {
@@ -31,6 +30,6 @@ public class Lw extends InstructI {
 
     @Override
     public String toString() {
-        return "Load address: " + super.getRs().toString() + " + " + super.getImme() + " to reg " + super.getRd().toString();
+        return "Store " + super.getRd().toString() + " to Address: " + super.getRs().toString() + " + " + super.getImme();
     }
 }

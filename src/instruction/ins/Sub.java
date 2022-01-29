@@ -1,7 +1,7 @@
 package instruction.ins;
 
 import elements.enums.InsRegex;
-import elements.node.InstructR;
+import elements.node.instructiontypes.InstructR;
 import elements.node.Register;
 
 

@@ -4,6 +4,7 @@ import elements.exceptions.InstructionException;
 import elements.exceptions.ParseException;
 import instruction.InstructionFactory;
 import instruction.ins.Lw;
+import instruction.ins.Sw;
 import lexer.CodeDialog;
 import lexer.Lexer;
 import elements.node.Node;
@@ -14,12 +15,13 @@ import java.util.*;
 
 public class ASTree {
     private static int REGNUM = 32;
+    private static int MEMORY_SIZE = 1024;
     private HashMap<Integer, Register> registerHashMap = new HashMap<>();
     private Lexer lexer = new Lexer(new CodeDialog());
     private Queue<Node> forist = new LinkedList<>();
     private ArrayList<String> log = new ArrayList<>();
     private InstructionFactory factory = new InstructionFactory();
-    private int[] memory = new int[1024];
+    private int[] memory = new int[MEMORY_SIZE];
 
     public ASTree() {
         for (int i = 0; i < REGNUM; i++) {
@@ -52,6 +54,11 @@ public class ASTree {
                 ((Lw) tree).operate(memory);
                 continue;
             }
+
+            if (tree instanceof Sw) {
+                ((Sw) tree).operate(memory);
+                continue;
+            }
             tree.operate();
         }
     }
@@ -67,6 +74,13 @@ public class ASTree {
             System.out.println("Reg id x" + key + ": " + registerHashMap.get(key).getValue());
         }
         System.out.println("--------------");
+        System.out.println("++++++++++++++");
+        for (int i = 0; i < MEMORY_SIZE; i++) {
+            if (memory[i] != 0) {
+                System.out.println("memory " + i + " : is " + memory[i]);
+            }
+        }
+        System.out.println("++++++++++++++");
 
     }
 

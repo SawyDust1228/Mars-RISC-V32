@@ -1,7 +1,11 @@
 package elements.enums;
 
 public enum InsRegex {
-    add("add", InsType.R), sub("sub", InsType.R), addi("addi", InsType.I), lw("lw", InsType.I);
+    add("add", InsType.R),
+    sub("sub", InsType.R),
+    addi("addi", InsType.I),
+    lw("lw", InsType.I),
+    sw("sw", InsType.S);
     private String regex;
     private InsType type;
 

@@ -1,4 +1,8 @@
-package elements.node;
+package elements.node.instructiontypes;
+
+import elements.node.Immediate;
+import elements.node.Instruction;
+import elements.node.Register;
 
 public abstract class InstructS extends Instruction {
 
@@ -17,6 +21,9 @@ public abstract class InstructS extends Instruction {
     @Override
     public abstract void operate();
 
+    @Override
+    public abstract void operate(int[] stack);
+
     public Register getRs() {
         return rs;
     }
@@ -29,7 +36,7 @@ public abstract class InstructS extends Instruction {
         return opcode;
     }
 
-    public Immediate getImme() {
-        return imme;
+    public int getImme() {
+        return imme.getValue();
     }
 }

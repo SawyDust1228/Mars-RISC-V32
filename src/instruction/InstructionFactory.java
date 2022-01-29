@@ -13,10 +13,12 @@ import java.util.HashMap;
 public class InstructionFactory {
     private RInstructionFactory rInstructionFactory;
     private IInstructionFactory iInstructionFactory;
+    private SInstructionFactory sInstructionFactory;
 
     public InstructionFactory() {
         rInstructionFactory = new RInstructionFactory();
         iInstructionFactory = new IInstructionFactory();
+        sInstructionFactory = new SInstructionFactory();
     }
 
     public Instruction makeInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap) throws InstructionException {
@@ -28,6 +30,8 @@ public class InstructionFactory {
                     return rInstructionFactory.makeRInstruction(words, registerHashMap);
                 case I:
                     return iInstructionFactory.makeIInstruction(words, registerHashMap);
+                case S:
+                    return sInstructionFactory.makeSInstruction(words, registerHashMap);
                 default:
                     throw new InstructionException("make Instruction fail");
             }
@@ -40,7 +44,9 @@ public class InstructionFactory {
     private InsType whichType(String insName) throws InstructionException {
         InsType type = InsType.WRONG_TYPE;
         type = (rInstructionFactory.isRInstruction(insName)) ? InsType.R :
-                (iInstructionFactory.isIInstruction(insName)) ? InsType.I : type;
+                (iInstructionFactory.isIInstruction(insName)) ? InsType.I :
+                        (sInstructionFactory.isSInstruction(insName)) ? InsType.S : type;
+
         if (type == InsType.WRONG_TYPE) {
             throw new InstructionException(type);
         }

@@ -1,4 +1,7 @@
-package elements.node;
+package elements.node.instructiontypes;
+
+import elements.node.Instruction;
+import elements.node.Register;
 
 public abstract class InstructR extends Instruction {
     private Register rs;
