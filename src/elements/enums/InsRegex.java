@@ -5,7 +5,9 @@ public enum InsRegex {
     sub("sub", InsType.R),
     addi("addi", InsType.I),
     lw("lw", InsType.I),
-    sw("sw", InsType.S);
+    sw("sw", InsType.S),
+    LUI("LUI", InsType.U),
+    AUIPC("AUIPC", InsType.U);
     private String regex;
     private InsType type;
 

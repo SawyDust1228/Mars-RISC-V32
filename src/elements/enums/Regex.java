@@ -6,7 +6,8 @@ public enum Regex {
             + "(" + InsRegex.sub.getRegex() + ")|"
             + "(" + InsRegex.add.getRegex() + ")|"
             + "(" + InsRegex.lw.getRegex() + ")|"
-            + "(" + InsRegex.sw.getRegex() + ")"),
+            + "(" + InsRegex.sw.getRegex() + ")|"
+            + "(" + InsRegex.LUI.getRegex() + ")"),
     REGISTER("[axst][0-9][0-9]?"),
     NUMBER("[+-]?[0-9]+"),
     DOT("\\,"),

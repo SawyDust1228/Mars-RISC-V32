@@ -14,11 +14,13 @@ public class InstructionFactory {
     private RInstructionFactory rInstructionFactory;
     private IInstructionFactory iInstructionFactory;
     private SInstructionFactory sInstructionFactory;
+    private UInstructionFactory uInstructionFactory;
 
     public InstructionFactory() {
         rInstructionFactory = new RInstructionFactory();
         iInstructionFactory = new IInstructionFactory();
         sInstructionFactory = new SInstructionFactory();
+        uInstructionFactory = new UInstructionFactory();
     }
 
     public Instruction makeInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap) throws InstructionException {
@@ -32,6 +34,8 @@ public class InstructionFactory {
                     return iInstructionFactory.makeIInstruction(words, registerHashMap);
                 case S:
                     return sInstructionFactory.makeSInstruction(words, registerHashMap);
+                case U:
+                    return uInstructionFactory.makeUInstruction(words, registerHashMap);
                 default:
                     throw new InstructionException("make Instruction fail");
             }
@@ -45,7 +49,8 @@ public class InstructionFactory {
         InsType type = InsType.WRONG_TYPE;
         type = (rInstructionFactory.isRInstruction(insName)) ? InsType.R :
                 (iInstructionFactory.isIInstruction(insName)) ? InsType.I :
-                        (sInstructionFactory.isSInstruction(insName)) ? InsType.S : type;
+                        (sInstructionFactory.isSInstruction(insName)) ? InsType.S :
+                                (uInstructionFactory.isUInstruction(insName)) ? InsType.U : type;
 
         if (type == InsType.WRONG_TYPE) {
             throw new InstructionException(type);

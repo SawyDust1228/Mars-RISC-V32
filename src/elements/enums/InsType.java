@@ -1,5 +1,5 @@
 package elements.enums;
 
 public enum InsType {
-    R, I, S, WRONG_TYPE
+    R, I, S, U, WRONG_TYPE
 }
