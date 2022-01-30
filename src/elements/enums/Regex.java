@@ -9,7 +9,7 @@ public enum Regex {
             + "(" + InsRegex.sw.getRegex() + ")|"
             + "(" + InsRegex.lui.getRegex() + ")|"
             + "(" + InsRegex.beq.getRegex() + ")|"
-            + "(" + InsRegex.jal.getRegex() + ")"),
+            + "(" + InsRegex.j.getRegex() + ")"),
     REGISTER("[axst][0-9][0-9]?"),
     NUMBER("[+-]?[0-9]+"),
     DOT("\\,"),

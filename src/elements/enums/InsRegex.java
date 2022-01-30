@@ -9,7 +9,7 @@ public enum InsRegex {
     lui("lui", InsType.U),
     AUIPC("AUIPC", InsType.U),
     beq("beq", InsType.B),
-    jal("jal", InsType.J);
+    j("j", InsType.J);
     private String regex;
     private InsType type;
 

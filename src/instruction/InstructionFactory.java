@@ -4,13 +4,11 @@ import elements.enums.InsType;
 import elements.exceptions.InstructionException;
 import elements.exceptions.ParseException;
 import elements.node.Address;
-import elements.node.Instruction;
 import elements.node.Node;
 import elements.node.Register;
 import elements.token.AddressToken;
 import elements.token.InstructToken;
 import elements.token.Token;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +20,7 @@ public class InstructionFactory {
     private UInstructionFactory uInstructionFactory;
     private BInstructionFactory bInstructionFactory;
     private AddressFactory addressFactory;
+    private JInstructionFactory jInstructionFactory;
 
     public InstructionFactory() {
         rInstructionFactory = new RInstructionFactory();
@@ -29,6 +28,7 @@ public class InstructionFactory {
         sInstructionFactory = new SInstructionFactory();
         uInstructionFactory = new UInstructionFactory();
         bInstructionFactory = new BInstructionFactory();
+        jInstructionFactory = new JInstructionFactory();
         addressFactory = new AddressFactory();
     }
 
@@ -48,6 +48,8 @@ public class InstructionFactory {
                     return uInstructionFactory.makeUInstruction(words, registerHashMap);
                 case B:
                     return bInstructionFactory.makeBInstruction(words, registerHashMap, addressTokenHashMap, addresses);
+                case J:
+                    return jInstructionFactory.makeJInstruction(words, addresses);
                 default:
                     throw new InstructionException("make Instruction fail");
             }
@@ -65,7 +67,8 @@ public class InstructionFactory {
                 (iInstructionFactory.isIInstruction(insName)) ? InsType.I :
                         (sInstructionFactory.isSInstruction(insName)) ? InsType.S :
                                 (uInstructionFactory.isUInstruction(insName)) ? InsType.U :
-                                        (bInstructionFactory.isBInstruction(insName)) ? InsType.B : InsType.ADDRESS_TYPE;
+                                        (bInstructionFactory.isBInstruction(insName)) ? InsType.B :
+                                                (jInstructionFactory.isJInstruction(insName)) ? InsType.J : InsType.ADDRESS_TYPE;
 
         return type;
     }

@@ -30,7 +30,7 @@ public class Beq extends InstructB {
     @Override
     public String toString() {
         if (super.getRs().getValue() == super.getRt().getValue()) {
-            return "" + super.getRs().toString() + " equals to " + super.getRt().toString();
+            return "" + super.getRs().toString() + " equals to " + super.getRt().toString() + " jump to " + super.getAddress().toString();
         } else {
             return "" + super.getRs().toString() + " NOT equals to " + super.getRt().toString();
         }

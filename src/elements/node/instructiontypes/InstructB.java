@@ -39,4 +39,8 @@ public abstract class InstructB extends Instruction {
     public int getLineNumber() {
         return address.getLineNumber();
     }
+
+    public Address getAddress(){
+        return address;
+    }
 }

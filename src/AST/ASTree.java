@@ -6,6 +6,7 @@ import elements.token.AddressToken;
 import instruction.AddressFactory;
 import instruction.InstructionFactory;
 import instruction.ins.Beq;
+import instruction.ins.J;
 import instruction.ins.Lw;
 import instruction.ins.Sw;
 import lexer.CodeDialog;
@@ -41,7 +42,7 @@ public class ASTree {
         while (lexer.read() != Token.EOF) {
             lexer.read();
         }
-        lexer.print();
+//        lexer.print();
         addressTokenHashMap = lexer.getAddressTokenHashMap();
         //这一步是找到所有的Address,先存一份便于查找
         parseWords();
@@ -87,6 +88,11 @@ public class ASTree {
             if (tree instanceof Sw) {
                 ((Sw) tree).operate(memory);
             }
+
+            if (tree instanceof J) {
+                counter = ((J) tree).branch();
+                operate();
+            }
             if (tree instanceof Beq) {
                 int b = ((Beq) tree).branch();
                 if (b == Integer.MIN_VALUE) {
@@ -110,7 +116,9 @@ public class ASTree {
         System.out.println("**************");
         System.out.println("--------------");
         for (Integer key : registerHashMap.keySet()) {
-            System.out.println("Reg id x" + key + ": " + registerHashMap.get(key).getValue());
+            if(registerHashMap.get(key).getValue() != 0){
+                System.out.println("Reg id x" + key + ": " + registerHashMap.get(key).getValue());
+            }
         }
         System.out.println("--------------");
         System.out.println("++++++++++++++");
