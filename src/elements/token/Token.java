@@ -32,6 +32,14 @@ public abstract class Token {
         return false;
     }
 
+    public boolean isColon() {
+        return false;
+    }
+
+    public boolean isAddress() {
+        return false;
+    }
+
     public boolean isBracket() {
         return false;
     }

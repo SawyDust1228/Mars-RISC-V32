@@ -7,12 +7,16 @@ public enum Regex {
             + "(" + InsRegex.add.getRegex() + ")|"
             + "(" + InsRegex.lw.getRegex() + ")|"
             + "(" + InsRegex.sw.getRegex() + ")|"
-            + "(" + InsRegex.LUI.getRegex() + ")"),
+            + "(" + InsRegex.LUI.getRegex() + ")|"
+            + "(" + InsRegex.beq.getRegex() + ")|"
+            + "(" + InsRegex.jal.getRegex() + ")"),
     REGISTER("[axst][0-9][0-9]?"),
     NUMBER("[+-]?[0-9]+"),
     DOT("\\,"),
     LEFT("\\("),
-    RIGHT("\\)");
+    RIGHT("\\)"),
+    COLON("\\:"),
+    ADDRESS("[A-Z][a-z_A-Z0-9]*");
 
     private String regex;
 

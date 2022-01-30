@@ -17,9 +17,10 @@ public class Lexer {
     private HashMap<Integer, ArrayList<Token>> words = new HashMap<>();
     private String regex = "\\s*((//.*)" + "|(" + Regex.REGISTER + ")" +
             "|(" + Regex.NUMBER + ")" + "|(" + Regex.DOT + ")" +
-            "|(" + Regex.LEFT + ")" + "|(" + Regex.RIGHT + ")" +
+            "|(" + Regex.LEFT + ")" + "|(" + Regex.RIGHT + ")" + "|(" + Regex.COLON + ")" + "|(" + Regex.ADDRESS + ")" +
             "|(" + Regex.INSTRUCTION + ")" + ")?";
     private Pattern pattern = Pattern.compile(regex);
+    private HashMap<Integer, AddressToken> addressTokenHashMap = new HashMap<>();
 
     public Lexer(Reader reader) {
         this.reader = new LineNumberReader(reader);
@@ -74,6 +75,13 @@ public class Lexer {
                     token = new BracketToken(index, true);
                 } else if (matcher.group(7) != null) {
                     token = new BracketToken(index, false);
+                } else if (matcher.group(8) != null) {
+                    token = new ColonToken(index);
+                } else if (matcher.group(9) != null) {
+                    token = new AddressToken(index, m);
+                    if (!addressTokenHashMap.containsValue(token)) {
+                        addressTokenHashMap.put(index, (AddressToken) token);
+                    }
                 } else {
                     token = new InstructToken(index, m);
                 }
@@ -141,5 +149,9 @@ public class Lexer {
 
     public HashMap<Integer, ArrayList<Token>> getWords() {
         return words;
+    }
+
+    public HashMap<Integer, AddressToken> getAddressTokenHashMap() {
+        return addressTokenHashMap;
     }
 }

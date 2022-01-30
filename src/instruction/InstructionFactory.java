@@ -2,8 +2,11 @@ package instruction;
 
 import elements.enums.InsType;
 import elements.exceptions.InstructionException;
+import elements.exceptions.ParseException;
 import elements.node.Instruction;
+import elements.node.Node;
 import elements.node.Register;
+import elements.token.AddressToken;
 import elements.token.InstructToken;
 import elements.token.Token;
 
@@ -15,15 +18,20 @@ public class InstructionFactory {
     private IInstructionFactory iInstructionFactory;
     private SInstructionFactory sInstructionFactory;
     private UInstructionFactory uInstructionFactory;
+    private BInstructionFactory bInstructionFactory;
+    private AddressFactory addressFactory;
 
     public InstructionFactory() {
         rInstructionFactory = new RInstructionFactory();
         iInstructionFactory = new IInstructionFactory();
         sInstructionFactory = new SInstructionFactory();
         uInstructionFactory = new UInstructionFactory();
+        bInstructionFactory = new BInstructionFactory();
+        addressFactory = new AddressFactory();
     }
 
-    public Instruction makeInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap) throws InstructionException {
+    public Node makeInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap,
+                                HashMap<Integer, AddressToken> addressTokenHashMap) throws InstructionException, ParseException {
         if (words.get(0) instanceof InstructToken) {
             String string = words.get(0).getText();
             InsType type = whichType(string);
@@ -36,9 +44,13 @@ public class InstructionFactory {
                     return sInstructionFactory.makeSInstruction(words, registerHashMap);
                 case U:
                     return uInstructionFactory.makeUInstruction(words, registerHashMap);
+                case B:
+                    return bInstructionFactory.makeBInstruction(words, registerHashMap, addressTokenHashMap);
                 default:
                     throw new InstructionException("make Instruction fail");
             }
+        } else if (words.get(0) instanceof AddressToken) {
+            return addressFactory.makeAddress(words, addressTokenHashMap);
         } else {
             throw new InstructionException(words.get(0));
         }
@@ -50,11 +62,9 @@ public class InstructionFactory {
         type = (rInstructionFactory.isRInstruction(insName)) ? InsType.R :
                 (iInstructionFactory.isIInstruction(insName)) ? InsType.I :
                         (sInstructionFactory.isSInstruction(insName)) ? InsType.S :
-                                (uInstructionFactory.isUInstruction(insName)) ? InsType.U : type;
+                                (uInstructionFactory.isUInstruction(insName)) ? InsType.U :
+                                        (bInstructionFactory.isBInstruction(insName)) ? InsType.B : InsType.ADDRESS_TYPE;
 
-        if (type == InsType.WRONG_TYPE) {
-            throw new InstructionException(type);
-        }
         return type;
     }
 

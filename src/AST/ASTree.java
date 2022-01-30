@@ -2,7 +2,9 @@ package AST;
 
 import elements.exceptions.InstructionException;
 import elements.exceptions.ParseException;
+import elements.token.AddressToken;
 import instruction.InstructionFactory;
+import instruction.ins.Beq;
 import instruction.ins.Lw;
 import instruction.ins.Sw;
 import lexer.CodeDialog;
@@ -22,12 +24,15 @@ public class ASTree {
     private ArrayList<String> log = new ArrayList<>();
     private InstructionFactory factory = new InstructionFactory();
     private int[] memory = new int[MEMORY_SIZE];
+    private HashMap<Integer, AddressToken> addressTokenHashMap;
+    private int counter;
 
     public ASTree() {
         for (int i = 0; i < REGNUM; i++) {
             registerHashMap.put(i, new Register(i));
         }
         Arrays.fill(memory, 0);
+        counter = 1;
     }
 
     public void read() throws ParseException, InstructionException {
@@ -35,32 +40,57 @@ public class ASTree {
             lexer.read();
         }
         lexer.print();
-        parseWords();
+        addressTokenHashMap = lexer.getAddressTokenHashMap();
+//        parseWords();
     }
 
-    private void parseWords() throws InstructionException {
+    private void parseWords() throws InstructionException, ParseException {
         HashMap<Integer, ArrayList<Token>> words = lexer.getWords();
         for (Integer key : words.keySet()) {
             ArrayList<Token> line = lexer.getWords().get(key);
-            forist.add(factory.makeInstruction(line, registerHashMap));
+            forist.add(factory.makeInstruction(line, registerHashMap, addressTokenHashMap));
         }
     }
 
-    public void operate() {
-        while (!forist.isEmpty()) {
+    private Node parseWords(int lineNumber) throws InstructionException, ParseException {
+        HashMap<Integer, ArrayList<Token>> words = lexer.getWords();
+        ArrayList<Token> line = words.get(lineNumber);
+        return factory.makeInstruction(line, registerHashMap, addressTokenHashMap);
+    }
+
+    private void operate(int lineNumber) throws InstructionException, ParseException {
+        forist.add(parseWords(lineNumber));
+    }
+
+    public void operate() throws InstructionException, ParseException {
+
+        if (counter >= lexer.getWords().size() + 1) {
+            return;
+        }
+        operate(counter);
+        if (!forist.isEmpty()) {
             Node tree = forist.poll();
             log.add(tree.toString());
             if (tree instanceof Lw) {
                 ((Lw) tree).operate(memory);
-                continue;
             }
 
             if (tree instanceof Sw) {
                 ((Sw) tree).operate(memory);
-                continue;
+            }
+            if (tree instanceof Beq) {
+                int b = ((Beq) tree).branch();
+                if (b == Integer.MIN_VALUE) {
+                    //
+                } else {
+                    counter = b;
+                    operate();
+                }
             }
             tree.operate();
         }
+        counter++;
+        operate();
     }
 
     public void print() {
