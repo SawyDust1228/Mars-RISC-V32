@@ -7,7 +7,7 @@ import elements.node.Immediate;
 import elements.node.Instruction;
 import elements.node.Register;
 import elements.token.Token;
-import instruction.ins.LUI;
+import instruction.ins.Lui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +28,9 @@ public class UInstructionFactory {
     public Instruction makeUInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap) throws InstructionException {
         String insName = words.get(0).getText();
         switch (insName) {
-            case "LUI":
+            case "lui":
                 checkSyntax(words);
-                return new LUI(registerHashMap.get(words.get(1).getId()),
+                return new Lui(registerHashMap.get(words.get(1).getId()),
                         new Immediate(words.get(3).getNumber()));
             default:
                 throw new InstructionException("failed to build U Instruction");

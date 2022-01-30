@@ -6,7 +6,7 @@ public enum InsRegex {
     addi("addi", InsType.I),
     lw("lw", InsType.I),
     sw("sw", InsType.S),
-    LUI("LUI", InsType.U),
+    lui("lui", InsType.U),
     AUIPC("AUIPC", InsType.U),
     beq("beq", InsType.B),
     jal("jal", InsType.J);

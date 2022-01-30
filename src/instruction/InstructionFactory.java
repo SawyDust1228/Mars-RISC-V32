@@ -3,6 +3,7 @@ package instruction;
 import elements.enums.InsType;
 import elements.exceptions.InstructionException;
 import elements.exceptions.ParseException;
+import elements.node.Address;
 import elements.node.Instruction;
 import elements.node.Node;
 import elements.node.Register;
@@ -12,6 +13,7 @@ import elements.token.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class InstructionFactory {
     private RInstructionFactory rInstructionFactory;
@@ -31,7 +33,7 @@ public class InstructionFactory {
     }
 
     public Node makeInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap,
-                                HashMap<Integer, AddressToken> addressTokenHashMap) throws InstructionException, ParseException {
+                                HashMap<Integer, AddressToken> addressTokenHashMap, HashSet<Address> addresses) throws InstructionException, ParseException {
         if (words.get(0) instanceof InstructToken) {
             String string = words.get(0).getText();
             InsType type = whichType(string);
@@ -45,7 +47,7 @@ public class InstructionFactory {
                 case U:
                     return uInstructionFactory.makeUInstruction(words, registerHashMap);
                 case B:
-                    return bInstructionFactory.makeBInstruction(words, registerHashMap, addressTokenHashMap);
+                    return bInstructionFactory.makeBInstruction(words, registerHashMap, addressTokenHashMap, addresses);
                 default:
                     throw new InstructionException("make Instruction fail");
             }

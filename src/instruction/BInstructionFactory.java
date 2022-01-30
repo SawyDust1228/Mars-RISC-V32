@@ -3,6 +3,7 @@ package instruction;
 import elements.enums.InsRegex;
 import elements.enums.InsType;
 import elements.exceptions.InstructionException;
+import elements.exceptions.ParseException;
 import elements.node.Address;
 import elements.node.Instruction;
 import elements.node.Register;
@@ -27,34 +28,31 @@ public class BInstructionFactory {
     }
 
     public Instruction makeBInstruction(ArrayList<Token> words, HashMap<Integer, Register> registerHashMap,
-                                        HashMap<Integer, AddressToken> addressTokenHashMap) throws InstructionException {
+                                        HashMap<Integer, AddressToken> addressTokenHashMap, HashSet<Address> addresses) throws InstructionException {
         String insName = words.get(0).getText();
         switch (insName) {
             case "beq":
-                checkSyntax(words, addressTokenHashMap);
+                checkSyntax(words, addresses);
                 assert words.get(5) instanceof AddressToken;
-                int lineNumber = -1;
-                String address = null;
-                for (Integer key : addressTokenHashMap.keySet()) {
-                    if (addressTokenHashMap.get(key).equals(words.get(5))) {
-                        lineNumber = key;
-                        address = words.get(5).getText();
-                        break;
+                Address a = null;
+                for (Address address : addresses) {
+                    if (address.toString().equals(words.get(5).getText())) {
+                        a = address;
                     }
                 }
-                if (lineNumber == -1) {
-                    throw new InstructionException("failed to build B Instruction");
+                if (a == null) {
+                    throw new InstructionException("fuck! build beq fail");
                 }
 
                 return new Beq(registerHashMap.get(words.get(1).getId()),
                         registerHashMap.get(words.get(3).getId()),
-                        new Address(lineNumber, address));
+                        a);
             default:
                 throw new InstructionException("failed to build B Instruction");
         }
     }
 
-    public void checkSyntax(ArrayList<Token> words, HashMap<Integer, AddressToken> addressHashMap) throws InstructionException {
+    public void checkSyntax(ArrayList<Token> words, HashSet<Address> addresses) throws InstructionException {
         if (words.size() != 6) {
             throw new InstructionException("B Instruction just have 6 words");
         }
@@ -84,7 +82,13 @@ public class BInstructionFactory {
                     + words.get(5).getText());
         }
         if (words.get(5) instanceof AddressToken) {
-            if (!addressHashMap.containsValue((AddressToken) words.get(5))) {
+            boolean flag = false;
+            for (Address address : addresses) {
+                if (address.toString().equals(words.get(5).getText())) {
+                    flag = true;
+                }
+            }
+            if (flag == false) {
                 throw new InstructionException("Fuck, we don't have this Address!!!!!!!");
             }
         }

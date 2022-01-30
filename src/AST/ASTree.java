@@ -3,6 +3,7 @@ package AST;
 import elements.exceptions.InstructionException;
 import elements.exceptions.ParseException;
 import elements.token.AddressToken;
+import instruction.AddressFactory;
 import instruction.InstructionFactory;
 import instruction.ins.Beq;
 import instruction.ins.Lw;
@@ -26,6 +27,7 @@ public class ASTree {
     private int[] memory = new int[MEMORY_SIZE];
     private HashMap<Integer, AddressToken> addressTokenHashMap;
     private int counter;
+    private AddressFactory addressFactory = new AddressFactory();
 
     public ASTree() {
         for (int i = 0; i < REGNUM; i++) {
@@ -41,21 +43,28 @@ public class ASTree {
         }
         lexer.print();
         addressTokenHashMap = lexer.getAddressTokenHashMap();
-//        parseWords();
+        //这一步是找到所有的Address,先存一份便于查找
+        parseWords();
     }
 
     private void parseWords() throws InstructionException, ParseException {
         HashMap<Integer, ArrayList<Token>> words = lexer.getWords();
         for (Integer key : words.keySet()) {
-            ArrayList<Token> line = lexer.getWords().get(key);
-            forist.add(factory.makeInstruction(line, registerHashMap, addressTokenHashMap));
+            ArrayList<Token> line = words.get(key);
+            //TODO
+            try {
+                addressFactory.check(line);
+                addressFactory.makeAddress(line, addressTokenHashMap);
+            } catch (Exception ignored) {
+
+            }
         }
     }
 
     private Node parseWords(int lineNumber) throws InstructionException, ParseException {
         HashMap<Integer, ArrayList<Token>> words = lexer.getWords();
         ArrayList<Token> line = words.get(lineNumber);
-        return factory.makeInstruction(line, registerHashMap, addressTokenHashMap);
+        return factory.makeInstruction(line, registerHashMap, addressTokenHashMap, addressFactory.getHaveMade());
     }
 
     private void operate(int lineNumber) throws InstructionException, ParseException {

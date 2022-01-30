@@ -1,4 +1,5 @@
 package instruction;
+
 import elements.exceptions.ParseException;
 import elements.node.Address;
 import elements.token.AddressToken;
@@ -15,6 +16,10 @@ public class AddressFactory {
         haveMade = new HashSet<>();
     }
 
+    public HashSet<Address> getHaveMade() {
+        return haveMade;
+    }
+
     public Address makeAddress(ArrayList<Token> words, HashMap<Integer, AddressToken> addressTokenHashMap) throws ParseException {
         check(words);
         assert words.get(0) instanceof AddressToken;
@@ -26,7 +31,7 @@ public class AddressFactory {
         return result;
     }
 
-    private void check(ArrayList<Token> words) throws ParseException {
+    public void check(ArrayList<Token> words) throws ParseException {
         if (words.size() != 2) {
             throw new ParseException("Address parse exception");
         }

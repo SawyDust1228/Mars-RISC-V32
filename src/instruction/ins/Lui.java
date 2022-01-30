@@ -4,9 +4,9 @@ import elements.node.Immediate;
 import elements.node.Register;
 import elements.node.instructiontypes.InstructU;
 
-public class LUI extends InstructU {
+public class Lui extends InstructU {
 
-    public LUI(Register rd, Immediate imme) {
+    public Lui(Register rd, Immediate imme) {
         super(rd, imme);
     }
 
